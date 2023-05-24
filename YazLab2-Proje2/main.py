@@ -20,13 +20,70 @@ class CustomButton(wx.Button):
     def on_mouse_enter(self, event):
         self.SetWindowStyleFlag(wx.BORDER_SIMPLE)
         self.SetBackgroundColour(self.default_background_color)
+        self.SetForegroundColour(wx.BLACK)
         self.Refresh()
 
     def on_mouse_leave(self, event):
         self.SetWindowStyleFlag(self.default_border_style)
         self.SetBackgroundColour(self.default_background_color)
+        self.SetForegroundColour(wx.WHITE)
         self.Refresh()
 
+class CustomDropdown(wx.ComboCtrl):
+    def __init__(self, parent, choices):
+        super().__init__(parent, style=wx.CB_READONLY)
+
+        self.SetPopupMaxHeight(200)  # Açılır menü maksimum yüksekliğini ayarla
+        self.SetTextCtrlStyle(wx.TE_PROCESS_ENTER)  # Metin kontrolü stilini ayarla
+
+        self.choices = choices
+        self.update_dropdown()
+
+        self.Bind(wx.EVT_COMBOBOX, self.on_combobox)
+        self.SetButtonBitmaps(wx.NullBitmap)  # Standart düğme görüntüsünü kaldır
+        self.SetCustomPaintWidth(200)  # Özel boyama genişliğini ayarla
+
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+
+
+    def update_dropdown(self):
+      self.SetValue(self.choices[0])  # Varsayılan değeri ayarla
+        menu = wx.Menu()
+        for choice in self.choices:
+            item = menu.Append(wx.ID_ANY, choice)
+            self.Bind(wx.EVT_MENU, self.on_menu_item, item)
+
+        self.SetMenu(menu)
+
+    def on_menu_item(self, event):
+        selected_item = self.choices[event.GetId()]
+        self.SetValue(selected_item)
+        print("Selected item:", selected_item)
+
+    def on_combobox(self, event):
+        selected_item = self.GetValue()
+        print("Selected item:", selected_item)
+
+    def on_paint(self, event):
+        dc = wx.BufferedPaintDC(self)
+        rect = self.GetClientRect()
+        dc.SetBackground(wx.WHITE_BRUSH)
+        dc.Clear()
+
+        # Seçili öğeyi çiz
+        selected_item = self.GetValue()
+        dc.SetTextForeground(wx.BLACK)
+        dc.SetFont(self.GetFont())
+        dc.DrawText(selected_item, rect.x + 5, rect.y + 5)
+
+        # Aşağı oku çiz
+        arrow_size = 10
+        arrow_pen = wx.Pen(wx.BLACK, width=1)
+        arrow_start = wx.Point(rect.width - arrow_size - 5, rect.height // 2)
+        arrow_end = wx.Point(rect.width - 5, rect.height // 2)
+        dc.DrawLine(arrow_start, arrow_end)
+        dc.DrawLine(arrow_end, arrow_end + wx.Point(-arrow_size, arrow_size // 2))
+        dc.DrawLine(arrow_end, arrow_end + wx.Point(-arrow_size, -arrow_size // 2))
 
 class MainFrame(wx.Frame):
     def __init__(self, parent):
@@ -51,7 +108,8 @@ class MainFrame(wx.Frame):
 
         # Grafik tipleri
         self.chart_types = ["Dağılım Grafiği", "Sütun Grafiği", "Kök Grafiği"]
-        self.chart_dropdown = wx.ComboBox(self.left_panel, choices=self.chart_types, style=wx.CB_DROPDOWN)
+        self.chart_dropdown = CustomDropdown(self.left_panel, choices=self.chart_types)
+
 
         # Butonlar
         self.create_button = CustomButton(self.left_panel, label="Oluştur", background_color=(0, 180, 216))
