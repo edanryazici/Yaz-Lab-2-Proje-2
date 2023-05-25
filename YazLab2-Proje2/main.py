@@ -2,7 +2,13 @@ import wx
 import wx.lib.agw.flatnotebook as fnb
 from customs import CustomSlider, CustomDropdown, CustomButton
 
+
+
 class MainFrame(wx.Frame):
+
+
+
+
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, title="Sıralama Projesi", size=(800, 600))
 
