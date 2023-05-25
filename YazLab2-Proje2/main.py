@@ -23,20 +23,22 @@ class MainFrame(wx.Frame):
         self.speed_value_label = wx.StaticText(self.left_panel, label="Hız: 50")
 
         # Sıralama algoritmaları
+        self.algorithms_options_label = wx.StaticText(self.left_panel, label="Algoritma Seçenekleri")
         self.algorithms = ["Seçme Sıralaması", "Kabarcık Sıralaması", "Ekleme Sıralaması", "Birleştirme Sıralaması",
                            "Hızlı Sıralama"]
         self.algorithm_radios = wx.RadioBox(self.left_panel, choices=self.algorithms, style=wx.RA_VERTICAL)
 
-        # Sıralama türü açılır menüsü
+        # Grafik türü açılır menüsü
         self.sort_type_label = wx.StaticText(self.left_panel, label="Grafik Türü:")
         self.sort_type_choices = ["Dağılım Grafiği", "Sütun Grafiği", "Kök Grafiği"]
         self.sort_type_dropdown = CustomDropdown(self.left_panel, choices=self.sort_type_choices)
 
         # Butonlar
-        self.create_button = CustomButton(self.left_panel, label="Oluştur", background_color=(46, 204, 113))
-        self.start_button = CustomButton(self.left_panel, label="Başlat", background_color=(52, 152, 219))
-        self.pause_button = CustomButton(self.left_panel, label="Durdur/ Devam Et", background_color=(255, 170, 0))
-        self.reset_button = CustomButton(self.left_panel, label="Sıfırla", background_color=(239, 35, 60))
+        self.create_button = CustomButton(self.left_panel, label="Oluştur", background_color=(56, 102, 65))
+        self.start_button = CustomButton(self.left_panel, label="Başlat", background_color=(2, 62, 138))
+        self.pause_button = CustomButton(self.left_panel, label="Durdur/ Devam Et", background_color=(255, 123, 0))
+        self.reset_button = CustomButton(self.left_panel, label="Sıfırla", background_color=(157, 2, 8))
+
 
         # Karşılaştırma sayısı ve analiz sonucunu tutacak değişkenler
         self.comparison_count = 0
@@ -50,18 +52,22 @@ class MainFrame(wx.Frame):
 
         # Sol Panel Sıralama
         self.left_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
         self.left_sizer.Add(self.size_slider, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.size_value_label, 0, wx.ALIGN_CENTER_HORIZONTAL)
         self.left_sizer.Add(self.speed_slider, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.speed_value_label, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        self.left_sizer.Add(self.sort_type_label, 0, wx.TOP | wx.LEFT, 10)
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
+        self.left_sizer.Add(self.algorithms_options_label, 0, wx.TOP | wx.LEFT, 10)
         self.left_sizer.Add(self.algorithm_radios, 0, wx.EXPAND | wx.ALL, 10)
+        self.left_sizer.Add(self.sort_type_label, 0, wx.TOP | wx.LEFT, 10)
         self.left_sizer.Add(self.sort_type_dropdown, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.create_button, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.start_button, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.pause_button, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.reset_button, 0, wx.EXPAND | wx.ALL, 10)
-        self.left_sizer.Add(self.comparison_label, 0, wx.ALIGN_CENTER_HORIZONTAL)
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
+        self.left_sizer.Add(self.comparison_label, 0, wx.TOP | wx.LEFT, 10)
         self.left_sizer.Add(self.analysis_label, 0, wx.ALIGN_CENTER_HORIZONTAL)
 
         self.left_panel.SetSizer(self.left_sizer)
@@ -77,6 +83,7 @@ class MainFrame(wx.Frame):
 
         # Ana Sıralama Paneli
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
         self.sizer.Add(self.left_panel, 0, wx.EXPAND)
         self.sizer.Add(self.right_panel, 1, wx.EXPAND)
         self.panel.SetSizer(self.sizer)
@@ -86,6 +93,29 @@ class MainFrame(wx.Frame):
         # Event bağlantıları
         self.size_slider.Bind(wx.EVT_SCROLL, self.on_size_slider_scroll)
         self.speed_slider.Bind(wx.EVT_SCROLL, self.on_speed_slider_scroll)
+        self.reset_button.Bind(wx.EVT_BUTTON, self.on_reset_button_click)
+
+    def on_reset_button_click(self, event):
+        # Boyutu sıfırla
+        self.size_slider.SetValue(50)
+        self.size_value_label.SetLabel("Boyut: 50")
+
+        # Hızı sıfırla
+        self.speed_slider.SetValue(50)
+        self.speed_value_label.SetLabel("Hız: 50")
+
+        # Radyo düğmesini sıfırla
+        self.algorithm_radios.SetSelection(0)
+
+        # Açılır menüyü sıfırla
+        self.sort_type_dropdown.SetSelection(-1)
+
+        # Karşılaştırma sayısı ve analiz sonucunu sıfırla
+        self.comparison_count = 0
+        self.analysis_result = ""
+        self.update_comparison_count()
+        self.update_analysis_result()
+
 
     def on_size_slider_scroll(self, event):
         value = self.size_slider.GetValue()

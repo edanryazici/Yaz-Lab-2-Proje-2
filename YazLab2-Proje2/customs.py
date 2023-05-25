@@ -76,10 +76,10 @@ class CustomButton(wx.Button):
 
         self.default_background_color = background_color
         self.default_border_style = wx.BORDER_DOUBLE
-        self.default_font = wx.Font(10, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
+        self.default_font = wx.Font(10, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_MAX, wx.FONTWEIGHT_MEDIUM)
 
         self.SetBackgroundColour(self.default_background_color)
-        self.SetForegroundColour(wx.WHITE)
+        self.SetForegroundColour((233, 236, 239))
         self.SetWindowStyleFlag(self.default_border_style)
         self.SetOwnFont(self.default_font)
 
@@ -95,5 +95,5 @@ class CustomButton(wx.Button):
     def on_mouse_leave(self, event):
         self.SetWindowStyleFlag(self.default_border_style)
         self.SetBackgroundColour(self.default_background_color)
-        self.SetForegroundColour(wx.WHITE)
+        self.SetForegroundColour((233, 236, 239))
         self.Refresh()
