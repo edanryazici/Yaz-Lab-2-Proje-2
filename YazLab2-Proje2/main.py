@@ -1,13 +1,23 @@
 import wx
 import wx.lib.agw.flatnotebook as fnb
+from matplotlib.backend_bases import NavigationToolbar2
+from matplotlib_inline.backend_inline import FigureCanvas
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
+import wx
+
 from customs import CustomSlider, CustomDropdown, CustomButton
 from algorithms import selection_sort, merge_sort, quick_sort, bubble_sortt, insertion_sort
-
+from grafics import create_scatter_chart, create_bar_chart, create_sqrt_chart
+import matplotlib.pyplot as plt
+import random
 
 class MainFrame(wx.Frame):
 
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent, title="Sıralama Projesi", size=(800, 600))
+        wx.Frame.__init__(self, parent, title="Sıralama Projesi", size=(700, 700))
+        self.visualization_canvas = None
+        self.toolbar = None
 
         self.panel = wx.Panel(self)
 
@@ -94,6 +104,10 @@ class MainFrame(wx.Frame):
         self.size_slider.Bind(wx.EVT_SCROLL, self.on_size_slider_scroll)
         self.speed_slider.Bind(wx.EVT_SCROLL, self.on_speed_slider_scroll)
         self.reset_button.Bind(wx.EVT_BUTTON, self.on_reset_button_click)
+        self.create_button.Bind(wx.EVT_BUTTON, self.on_create_button)
+        self.start_button.Bind(wx.EVT_BUTTON, self.on_start_button)
+
+        self.visualization_fig = None
 
     def on_reset_button_click(self, event):
         # Boyutu sıfırla
@@ -116,6 +130,8 @@ class MainFrame(wx.Frame):
         self.update_comparison_count()
         self.update_analysis_result()
 
+        # Görselleştirmeyi sıfırla
+        self.reset_visualization()
 
     def on_size_slider_scroll(self, event):
         value = self.size_slider.GetValue()
@@ -125,22 +141,158 @@ class MainFrame(wx.Frame):
         value = self.speed_slider.GetValue()
         self.speed_value_label.SetLabel("Hız: " + str(value))
 
+    def on_create_button(self, event):
+        # Sıralama için veri kümesini oluştur
+        size = self.size_slider.GetValue()
+        data = list(range(1, size + 1))
+        random.shuffle(data)
+
+        # Görselleştirmeyi sıfırla ve yeniden oluştur
+        self.reset_visualization()
+        self.create_visualization(data)
+
+    def on_start_button(self, event):
+        # Sıralama işlemini başlat
+        algorithm_index = self.algorithm_radios.GetSelection()
+        sort_algorithm = None
+
+        if algorithm_index == 0:
+            sort_algorithm = selection_sort
+        elif algorithm_index == 1:
+            sort_algorithm = bubble_sortt
+        elif algorithm_index == 2:
+            sort_algorithm = insertion_sort
+        elif algorithm_index == 3:
+            sort_algorithm = merge_sort
+        elif algorithm_index == 4:
+            sort_algorithm = quick_sort
+
+        if sort_algorithm is not None:
+            data = self.get_visualization_data()
+            self.start_sorting(sort_algorithm, data)
+
+    def create_visualization(self, data):
+        # Önceki grafik nesnesini temizle
+        if self.visualization_canvas:
+            self.visualization_canvas.Destroy()
+        # Görselleştirme figürünü oluştur
+        if self.sort_type_dropdown.GetSelection() == 0:
+            fig = plt.figure()
+            self.visualization_canvas = FigureCanvas(self.right_panel, -1, fig)
+
+            self.right_sizer.Insert(0, self.visualization_canvas, 1, wx.EXPAND)
+
+            self.visualization_canvas.figure.add_subplot(111).bar(range(len(data)), data)
+            self.visualization_canvas.figure.suptitle("Dağılım Grafiği")
+            self.visualization_canvas.draw()
+
+        elif self.sort_type_dropdown.GetSelection() == 1:
+            fig = plt.figure()
+            self.visualization_canvas = FigureCanvas(self.right_panel, -1, fig)
+
+            self.right_sizer.Insert(0, self.visualization_canvas, 1, wx.EXPAND)
+
+            self.visualization_canvas.figure.add_subplot(111).bar(range(len(data)), data)
+            self.visualization_canvas.figure.suptitle("Sütun Grafiği")
+            self.visualization_canvas.draw()
+
+        elif self.sort_type_dropdown.GetSelection() == 2:
+            fig = plt.figure()
+            self.visualization_canvas = FigureCanvas(self.right_panel, -1, fig)
+
+            self.right_sizer.Insert(0, self.visualization_canvas, 1, wx.EXPAND)
+
+            self.visualization_canvas.figure.add_subplot(111).plot(range(len(data)), data)
+            self.visualization_canvas.figure.suptitle("Kök Grafiği")
+            self.visualization_canvas.draw()
+
+        
+
+    def reset_visualization(self):
+        # Görselleştirme figürünü sıfırla
+        if self.visualization_fig is not None:
+            self.visualization_fig.clear()
+            self.visualization_canvas.draw()
+            self.right_sizer.Remove(0)  # Toolbar'ı kaldır
+            self.right_sizer.Remove(0)  # Canvas'ı kaldır
+            self.visualization_fig = None
+            self.visualization_canvas = None
+            self.toolbar = None
+
+    def get_visualization_data(self):
+        # Görselleştirme verisini al
+        if self.visualization_fig is not None:
+            if self.sort_type_dropdown.GetSelection() == 0:
+                # Dağılım grafiği için veriyi al
+                bars = self.visualization_fig.axes[0].patches
+                data = [bar.get_height() for bar in bars]
+                return data
+            elif self.sort_type_dropdown.GetSelection() == 1:
+                # Sütun grafiği için veriyi al
+                bars = self.visualization_fig.axes[0].patches
+                data = [bar.get_height() for bar in bars]
+                return data
+            elif self.sort_type_dropdown.GetSelection() == 2:
+                # Kök grafiği için veriyi al
+                lines = self.visualization_fig.axes[0].lines
+                data = [line.get_ydata()[0] for line in lines]
+                return data
+
+        return []
+
+    def update_visualization(self, data):
+        # Görselleştirmeyi güncelle
+        if self.visualization_fig is not None:
+            if self.sort_type_dropdown.GetSelection() == 0:
+                # Dağılım grafiğini güncelle
+                bars = self.visualization_fig.axes[0].patches
+                for bar, height in zip(bars, data):
+                    bar.set_height(height)
+                self.visualization_fig.canvas.draw()
+            elif self.sort_type_dropdown.GetSelection() == 1:
+                # Sütun grafiğini güncelle
+                bars = self.visualization_fig.axes[0].patches
+                for bar, height in zip(bars, data):
+                    bar.set_height(height)
+                self.visualization_fig.canvas.draw()
+            elif self.sort_type_dropdown.GetSelection() == 2:
+                # Kök grafiğini güncelle
+                lines = self.visualization_fig.axes[0].lines
+                for line, y in zip(lines, data):
+                    line.set_ydata([y, y])
+                self.visualization_fig.canvas.draw()
+
     def update_comparison_count(self):
+        # Karşılaştırma sayısını güncelle
         self.comparison_label.SetLabel("Karşılaştırma Sayısı: " + str(self.comparison_count))
 
     def update_analysis_result(self):
+        # Analiz sonucunu güncelle
         self.analysis_label.SetLabel(self.analysis_result)
 
-    def show_analysis_result(self):
-        # Sıralama işlemi tamamlandığında karşılaştırma sayısı ve analiz sonucunu ekrana yazdır
+    def start_sorting(self, sort_algorithm, data):
+        # Sıralama işlemini başlat ve görselleştirmeyi güncelle
+        self.comparison_count = 0
         self.update_comparison_count()
-        self.update_analysis_result()
 
-        # Analiz sonuçlarını güncelledikten sonra paneli yenile
-        self.panel.Layout()
+        if sort_algorithm is not None:
+            # Sıralama işlemini başlat
+            sorted_data, comparisons = sort_algorithm(data)
+            self.comparison_count = comparisons
+            self.update_comparison_count()
 
+            if sorted_data == sorted(data):
+                self.analysis_result = "Sıralama başarıyla tamamlandı."
+            else:
+                self.analysis_result = "Sıralama işlemi başarısız."
 
-if __name__ == '__main__':
-    app = wx.App()
-    frame = MainFrame(None)
-    app.MainLoop()
+            self.update_analysis_result()
+            self.update_visualization(sorted_data)
+
+        else:
+            self.analysis_result = "Lütfen bir sıralama algoritması seçin."
+            self.update_analysis_result()
+
+app = wx.App()
+frame = MainFrame(None)
+app.MainLoop()
