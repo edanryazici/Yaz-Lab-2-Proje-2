@@ -62,12 +62,12 @@ class MainFrame(wx.Frame):
 
         # Sol Panel Sıralama
         self.left_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekleme
         self.left_sizer.Add(self.size_slider, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.size_value_label, 0, wx.ALIGN_CENTER_HORIZONTAL)
         self.left_sizer.Add(self.speed_slider, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.speed_value_label, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekleme
         self.left_sizer.Add(self.algorithms_options_label, 0, wx.TOP | wx.LEFT, 10)
         self.left_sizer.Add(self.algorithm_radios, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.sort_type_label, 0, wx.TOP | wx.LEFT, 10)
@@ -76,7 +76,7 @@ class MainFrame(wx.Frame):
         self.left_sizer.Add(self.start_button, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.pause_button, 0, wx.EXPAND | wx.ALL, 10)
         self.left_sizer.Add(self.reset_button, 0, wx.EXPAND | wx.ALL, 10)
-        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekleme
         self.left_sizer.Add(self.comparison_label, 0, wx.TOP | wx.LEFT, 10)
         self.left_sizer.Add(self.analysis_label, 0, wx.ALIGN_CENTER_HORIZONTAL)
 
@@ -93,7 +93,7 @@ class MainFrame(wx.Frame):
 
         # Ana Sıralama Paneli
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekle
+        self.left_sizer.AddSpacer(20)  # 20 piksel boşluk ekleme
         self.sizer.Add(self.left_panel, 0, wx.EXPAND)
         self.sizer.Add(self.right_panel, 1, wx.EXPAND)
         self.panel.SetSizer(self.sizer)
@@ -110,27 +110,27 @@ class MainFrame(wx.Frame):
         self.visualization_fig = None
 
     def on_reset_button_click(self, event):
-        # Boyutu sıfırla
+        # Boyutu sıfırlama
         self.size_slider.SetValue(50)
         self.size_value_label.SetLabel("Boyut: 50")
 
-        # Hızı sıfırla
+        # Hızı sıfırlama
         self.speed_slider.SetValue(50)
         self.speed_value_label.SetLabel("Hız: 50")
 
-        # Radyo düğmesini sıfırla
+        # Radyo düğmesini sıfırlama
         self.algorithm_radios.SetSelection(0)
 
-        # Açılır menüyü sıfırla
+        # Açılır menüyü sıfırlama
         self.sort_type_dropdown.SetSelection(-1)
 
-        # Karşılaştırma sayısı ve analiz sonucunu sıfırla
+        # Karşılaştırma sayısı ve analiz sonucunu sıfırlama
         self.comparison_count = 0
         self.analysis_result = ""
         self.update_comparison_count()
         self.update_analysis_result()
 
-        # Görselleştirmeyi sıfırla
+        # Görselleştirmeyi sıfırlama
         self.reset_visualization()
 
     def on_size_slider_scroll(self, event):
@@ -142,20 +142,20 @@ class MainFrame(wx.Frame):
         self.speed_value_label.SetLabel("Hız: " + str(value))
 
     def on_create_button(self, event):
-        # Hız çubuğundan değeri al
+        # Hız çubuğundan değeri alma
         speed = self.speed_slider.GetValue()
 
-        # Sıralama için veri kümesini oluştur
+        # Sıralama için veri kümesini oluşturma
         size = self.size_slider.GetValue()
         data = list(range(1, size + 1))
         random.shuffle(data)
 
-        # Görselleştirmeyi sıfırla ve yeniden oluştur
+        # Görselleştirmeyi sıfırlama ve yeniden oluşturma
         self.reset_visualization()
         self.create_visualization(data)
 
     def on_start_button(self, event):
-        # Sıralama işlemini başlat
+        # Sıralama işlemini başlatma
         algorithm_index = self.algorithm_radios.GetSelection()
         sort_algorithm = None
 
@@ -175,10 +175,10 @@ class MainFrame(wx.Frame):
             self.start_sorting(sort_algorithm, data)
 
     def create_visualization(self, data):
-        # Önceki grafik nesnesini temizle
+        # Önceki grafik nesnesini temizleme
         if self.visualization_canvas:
             self.visualization_canvas.Destroy()
-        # Görselleştirme figürünü oluştur
+        # Görselleştirme figürünü oluşturma
         if self.sort_type_dropdown.GetSelection() == 0:
             fig = plt.figure()
             self.visualization_canvas = FigureCanvas(self.right_panel, -1, fig)
@@ -212,31 +212,31 @@ class MainFrame(wx.Frame):
 
 
     def reset_visualization(self):
-        # Görselleştirme figürünü sıfırla
+        # Görselleştirme figürünü sıfırlama
         if self.visualization_fig is not None:
             self.visualization_fig.clear()
             self.visualization_canvas.draw()
-            self.right_sizer.Remove(0)  # Toolbar'ı kaldır
-            self.right_sizer.Remove(0)  # Canvas'ı kaldır
+            self.right_sizer.Remove(0)  # Toolbar'ı kaldırma
+            self.right_sizer.Remove(0)  # Canvas'ı kaldırma
             self.visualization_fig = None
             self.visualization_canvas = None
             self.toolbar = None
 
     def get_visualization_data(self):
-        # Görselleştirme verisini al
+        # Görselleştirme verisini alma
         if self.visualization_fig is not None:
             if self.sort_type_dropdown.GetSelection() == 0:
-                # Dağılım grafiği için veriyi al
+                # Dağılım grafiği için veriyi alma
                 bars = self.visualization_fig.axes[0].patches
                 data = [bar.get_height() for bar in bars]
                 return data
             elif self.sort_type_dropdown.GetSelection() == 1:
-                # Sütun grafiği için veriyi al
+                # Sütun grafiği için veriyi alma
                 bars = self.visualization_fig.axes[0].patches
                 data = [bar.get_height() for bar in bars]
                 return data
             elif self.sort_type_dropdown.GetSelection() == 2:
-                # Kök grafiği için veriyi al
+                # Kök grafiği için veriyi alma
                 lines = self.visualization_fig.axes[0].lines
                 data = [line.get_ydata()[0] for line in lines]
                 return data
@@ -244,42 +244,42 @@ class MainFrame(wx.Frame):
         return []
 
     def update_visualization(self, data):
-        # Görselleştirmeyi güncelle
+        # Görselleştirmeyi güncelleme
         if self.visualization_fig is not None:
             if self.sort_type_dropdown.GetSelection() == 0:
-                # Dağılım grafiğini güncelle
+                # Dağılım grafiğini güncelleme
                 bars = self.visualization_fig.axes[0].patches
                 for bar, height in zip(bars, data):
                     bar.set_height(height)
                 self.visualization_fig.canvas.draw()
             elif self.sort_type_dropdown.GetSelection() == 1:
-                # Sütun grafiğini güncelle
+                # Sütun grafiğini güncelleme
                 bars = self.visualization_fig.axes[0].patches
                 for bar, height in zip(bars, data):
                     bar.set_height(height)
                 self.visualization_fig.canvas.draw()
             elif self.sort_type_dropdown.GetSelection() == 2:
-                # Kök grafiğini güncelle
+                # Kök grafiğini güncelleme
                 lines = self.visualization_fig.axes[0].lines
                 for line, y in zip(lines, data):
                     line.set_ydata([y, y])
                 self.visualization_fig.canvas.draw()
 
     def update_comparison_count(self):
-        # Karşılaştırma sayısını güncelle
+        # Karşılaştırma sayısını güncelleme
         self.comparison_label.SetLabel("Karşılaştırma Sayısı: " + str(self.comparison_count))
 
     def update_analysis_result(self):
-        # Analiz sonucunu güncelle
+        # Analiz sonucunu güncelleme
         self.analysis_label.SetLabel(self.analysis_result)
 
     def start_sorting(self, sort_algorithm, data):
-        # Sıralama işlemini başlat ve görselleştirmeyi güncelle
+        # Sıralama işlemini başlatma ve görselleştirmeyi güncelleme
         self.comparison_count = 0
         self.update_comparison_count()
 
         if sort_algorithm is not None:
-            # Sıralama işlemini başlat
+            # Sıralama işlemini başlatma
             sorted_data, comparisons = sort_algorithm(data)
             self.comparison_count = comparisons
             self.update_comparison_count()
