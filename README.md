@@ -3,7 +3,7 @@
  <br>
  201307061 Edanur Yazıcı - 201307067 Ela Karaoğlu
  <br>
- Proje Raporu Linki: 
+ Proje Raporu Linki: https://drive.google.com/file/d/129ZemcHhpB-5U_nGIxGal7Fc9QPB2uX0/view?usp=sharing
  <br>
  <br>
  <br>
@@ -16,9 +16,12 @@ Ana panel, kullanıcının sol paneldeki seçimlerine göre dinamik olarak görs
 <br>
 <b>Projenin Geliştirilme Ortamı</b>
 <br>
-Bu proje, Python programlama dili ve wxPython vb. kütüphaneleri kullanarak PyCharm IDE'si üzerinden tasarlanmıştır. 
+Bu proje, Python programlama dili ve wxPython vb. kütüphaneleri kullanarak PyCharm IDE'si üzerinden tasarlanmıştır.
+<br>
 PyCharm sürümü olarak: Pycharm-community-2023.1.2
+<br>
 Pyhton sürümü olarak: pyhton-3.10.9 amd64
+<br>
 wxPython sürümü olarak: wxpyhton 4.0.4
 <br>
 <br>
@@ -26,8 +29,11 @@ wxPython sürümü olarak: wxpyhton 4.0.4
 Projenin Çalışır Hale Getirilmesi
 <br>
 Projenin bilgisayarınız üzerinde sorunsuz çalışması için ilk öncelikle “Projenin Geliştirilme Ortamı” başlığı altında sürümleri de verilmiş programları indirmeniz gerekmektedir. İndirme işlemlerini tamamladıktan sonra ilk öncelikle Pyhton kurulumunu sağlamalısınız. Daha sonrasında Pycharm kurulumunu gerçekleştirmelisiniz. Bu aşamada proje kodlarını açabilir ve inceleyebilirsiniz ama etkin bir şekilde çalışması için PyCharm üzerinden projenize wxPyhton kütüphanesini dahil etmeniz gerekir. Pycharm üzerinde proje klasörü açıkken sol yukarıda ki 4 çizgi üzerine basıp:
+<br>
 File--> Settings--> Project: proje_adınız--> Pyhton Interpreter seçeneğine basın buradan sonra sağ paneldeki listeden devam edin.
+<br>
 Sağ paneldeki listeden: pip --> arama kısmına: wxpyhton yazın ve aşağıda gözükecek olan ‘install’ butonuna basınız. Eğer sürüm 4.0.4 olarak seçili değilse ‘Specify Version’ yazan kısmın tikini işaretleyin ve açılan listeden 4.0.4 sürümünü seçerek ‘install’ butonuna basın.
+<br>
 Bu aşamaları sorunsuz bir şekilde tamamladığınızda Sıralama Algoritmaları projesini başarılı ve etkin bir şekilde kendi bilgisayarınızda da çalıştırabilirsiniz.
 <br>
 <br>
