@@ -142,6 +142,9 @@ class MainFrame(wx.Frame):
         self.speed_value_label.SetLabel("Hız: " + str(value))
 
     def on_create_button(self, event):
+        # Hız çubuğundan değeri al
+        speed = self.speed_slider.GetValue()
+
         # Sıralama için veri kümesini oluştur
         size = self.size_slider.GetValue()
         data = list(range(1, size + 1))
@@ -206,7 +209,7 @@ class MainFrame(wx.Frame):
             self.visualization_canvas.figure.suptitle("Kök Grafiği")
             self.visualization_canvas.draw()
 
-        
+
 
     def reset_visualization(self):
         # Görselleştirme figürünü sıfırla
