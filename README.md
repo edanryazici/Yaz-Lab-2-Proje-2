@@ -34,8 +34,9 @@ Bu aşamaları sorunsuz bir şekilde tamamladığınızda Sıralama Algoritmalar
 <br>
 <b>Proje Ekranları</b>
 <br>
-<img src="https://raw.githubusercontent.com/edanryazici/Yaz-Lab-2-Proje-2/main/ekran-1.jpg" width="auto">
 <br>
-<img src="https://raw.githubusercontent.com/edanryazici/Yaz-Lab-2-Proje-2/main/ekran-2.jpg" width="auto">
+<img src="https://raw.githubusercontent.com/edanryazici/Yaz-Lab-2-Proje-2/main/ekran-1.jpg" width="500" height="500">
 <br>
-<img src="https://raw.githubusercontent.com/edanryazici/Yaz-Lab-2-Proje-2/main/ekran-3.jpg" width="auto">
+<img src="https://raw.githubusercontent.com/edanryazici/Yaz-Lab-2-Proje-2/main/ekran-2.jpg" width="500" height="500">
+<br>
+<img src="https://raw.githubusercontent.com/edanryazici/Yaz-Lab-2-Proje-2/main/ekran-3.jpg" width="500" height="500">
